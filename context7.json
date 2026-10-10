@@ -1,0 +1,21 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "Talk-Me Online Chat REST API (lcab.talk-me.ru)",
+  "description": "REST API онлайн-чата Talk-Me (json/v1.0): сообщения и диалоги, отправка сообщений клиентам и операторам, начать чат в WhatsApp/Viber/SMS/Email, операторы, посетители, боты, отчёты, отзывы, webhooks, лицензии и база знаний.",
+  "folders": ["docs"],
+  "excludeFolders": ["scripts", "postman"],
+  "excludeFiles": [],
+  "rules": [
+    "Все методы вызываются только через POST на https://lcab.talk-me.ru/json/v1.0/{method}, например /chat/message/sendToClient.",
+    "Каждый запрос должен содержать заголовки X-Token (API-токен онлайн-чата из личного кабинета) и Content-Type: application/json; тело — JSON в utf-8.",
+    "Методы без параметров вызываются с пустым JSON-объектом {}.",
+    "Успех определяется полем success в ответе, а не HTTP-статусом: при success=true данные лежат в result, при success=false — в error {code, descr}.",
+    "HTTP 400 — ошибка валидации JSON, 401 — неверный или отсутствующий X-Token, 500 — ошибка сервера; тело в том же формате {success:false, error}.",
+    "Даты в запросах передаются строкой YYYY-MM-DD HH:MM:SS или YYYY-MM-DD в московском времени; isLocal: true переключает на часовой пояс проекта.",
+    "Период chat/message/getList — не более 14 дней, отчётов chat/report/* — не более 31 дня, chat/client/getList — не более 7 дней.",
+    "Посетителя идентифицируют по clientId (id из Cookies виджета) или по числовому searchId; оператора — по login.",
+    "chat/message/sendToClient работает, если последнее сообщение в диалоге от клиента или с момента последнего сообщения клиента прошло меньше 7 дней; первым написать клиенту можно через chat/message/startChat.",
+    "Файлы для message.attachments загружаются через отдельное API файлового хранилища с токеном API личного кабинета, а не токеном онлайн-чата.",
+    "Методы chat/message/editMessageSentToClient, chat/message/deleteMessageToClientMethod и chat/report/operators устарели: используйте chat/message/editMessage, chat/message/deleteMessage и chat/report/operatorDialogs."
+  ]
+}
